@@ -1,16 +1,15 @@
+import os
 import sys
 import json
 import socket
+import datetime
 
 import dns.resolver
 import dns.query
 import dns.zone
 
-## Initial add of hostname
-
 query_domain = sys.argv[1]
-
-# Get the nameservers of the domain
+log_root_directory = sys.argv[2]
 
 def fetch_records(query_domain, record_type) :
     record_array = []
@@ -24,21 +23,30 @@ def fetch_records(query_domain, record_type) :
     except dns.resolver.NoAnswer:
         return ['no records']
 
+
+# Lookups on the most common subdomains
 record_list = ['NS', 'MX', 'A', 'TXT', 'CNAME', 'AAAA']
 result = {}
 
 for record in record_list:
     result[record] = fetch_records(query_domain, record)
 
-print json.dumps(result, indent=4)
-#json.dumps(result)
-
-# if a zone transfer is not supported, do lookups on the most common subdomains
-
 # Wrap up in json file
+result_json = json.dumps(result, indent=4)
 
 # Create domain directory if it does not already exist and save with timestamp
+log_file_timestamp = datetime.datetime.now().strftime("_%A_%d_%B_%Y_%I_%M%p")
+log_file_name = query_domain + log_file_timestamp + '.json'
+log_file_full_path = log_root_directory + '/' + query_domain + '/' + log_file_name
 
+log_directory = log_root_directory + '/' + query_domain
+
+if not os.path.exists(log_directory):
+    os.makedirs(log_directory)
+
+log_file = open(log_file_full_path, "w")
+log_file.write(result_json)
+log_file.close()
 
 
 ## Scheduled check
