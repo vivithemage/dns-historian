@@ -1,9 +1,21 @@
-## Scheduled check
+import os
+import json
+import time
+import requests
 
-# find the domain with the oldest lookup
+while True:
+    files = sorted(os.listdir('logs'))
 
-# run the same scan as initial lookup
+    for hostname in files:
+        time.sleep(1)
+        try:
+            url = "http://127.0.0.1:5000/write.json"
+            values = {"hostname": hostname}
+            r = requests.post(url, json = values)
 
-# If there is a difference, save it as a new file
+            print ("updating: " + hostname)
+            print ("response: " + r.text)
+        except:
+            print ("post request failed, skipping...")
 
-# otherwise update the existing file with a timestamp
+    print ("Retrieving fresh directory listing and starting update again...")
