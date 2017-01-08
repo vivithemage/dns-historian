@@ -10,7 +10,7 @@ def get_records(query_hostname, record_type):
         for record in dns.resolver.query(query_hostname, record_type) :
             record_array.append(str(record))
 
-        return record_array
+        return sorted(record_array)
 
     except dns.resolver.NoAnswer:
         return ['no records']

@@ -15,9 +15,6 @@ class Storage:
         # set flags on which storage system to use
         self.flat_system = True
 
-    def get_log_directory(self):
-        return self.log_directory + '/' + self.hostname
-
     def list_files(self):
         files = sorted(os.listdir(self.log_directory))
 
@@ -52,7 +49,7 @@ class Storage:
 
         # DNS has changes as we have no record if it
         if newest_filename is False:
-            return False
+            return True
 
         newest_json_string = file_get_contents(self.log_directory + '/' + newest_filename)
 
@@ -63,7 +60,7 @@ class Storage:
         newest = json.loads(newest_json_string)
         newest_json = json.dumps(newest)
 
-        if newest_json == sent_json :
+        if newest_json == sent_json:
             return False
         else:
             return True

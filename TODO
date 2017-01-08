@@ -1,0 +1,8 @@
+Currently it does what's needed however, there are plenty of improvemnents that could be made.
+
+* Switch it over to GET
+* Date filters to filter results.
+* Add  mongodb support. As I understand, the data seems perfect for mongodb.
+* Lookups on records. For instance, CNAME and SPF records have hostnames in so it would be good to look those up to. This should be recursive.
+* Email notifications. Sending out an email with a diff if a change is detected seems useful.
+
