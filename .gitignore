@@ -1,2 +1,2 @@
-src/*.pyc
-logs/*
+dns_historian/*.pyc
+dns_historian/logs/*
