@@ -1,7 +1,7 @@
 DNS Historian
 -------------
 
-DNS Historian takes a hostname, periodically looks up common record types (NS, MX, A, TXT, CNAME, AAAA) and record them as flatfiles in json format.
+DNS Historian takes a hostname, periodically looks up common record types (NS, MX, A, TXT, CNAME, AAAA) and records them as flatfiles in json format.
 
 *Add a domain (example.com) using:*
 
@@ -14,13 +14,12 @@ DNS Historian takes a hostname, periodically looks up common record types (NS, M
 *Setup and run*
 
 	pip install flask python-dnspython requests
-	git clone
-	cd dns-historian/dns-historian
+	cd dns_historian
 	python dns-historian.py
 
 *Scheduled DNS lookups*
 
 Once the hostname is added, it needs to be periodically checked for changes.  This is done with updater.py. A quick way to get started is simply install tmux and then:
 
-	tmux;
-	python updater.py;
+	tmux
+	python updater.py
