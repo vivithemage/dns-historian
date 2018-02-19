@@ -1,9 +1,9 @@
 import os
-import sys
 import json
 import datetime
 
-from utils import *
+from dnshistorian._utils import *
+
 
 class Storage:
 

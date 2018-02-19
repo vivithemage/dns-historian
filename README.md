@@ -1,5 +1,29 @@
-DNS Historian
--------------
+# DNS Historian
+
+
+## V2
+
+The whole system consists of three different sections.
+The first is the scanner. This looks through the database and periodically does all the lookups on hostnames to see if they have changed and writes any new changes.
+The second is the rest api. This essentially deals with all requests and sends back relevant info.
+The last is the frontend which essentially (ionic - html, css, js)
+
+## Scanner
+
+This never interacts with the rest api. All it does is read the mongodb database.
+
+Classes and overview of use
+
+Scanner - Creates and calls all the different tasks
+Storage
+Hostname
+
+
+
+
+
+
+## V1
 
 DNS Historian takes a hostname, periodically looks up common record types (NS, MX, A, TXT, CNAME, AAAA) and records them as flatfiles in json format.
 
