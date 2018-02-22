@@ -1,5 +1,7 @@
 from threading import Thread
+from collections import defaultdict
 from hostname import *
+import pprint
 
 class BulkDNSScan():
     """
@@ -7,6 +9,8 @@ class BulkDNSScan():
     Essentially
     """
     def __init__(self):
+        self.complete_results = defaultdict(list)
+
         self.record_type_list = ['NS', 'MX', 'A', 'TXT', 'CNAME', 'AAAA']
 
         """ 
@@ -63,21 +67,23 @@ class BulkDNSScan():
             'hgfgdf.',
             'news.',
             '1rer.',
-            'lkjkui.'
+            'lkjkui.',
+            'pop.',
+            'smtp.',
+            'backup'
         ];
 
     def scan_thread(self, subdomain, domain):
         hostname = Hostname()
+        subdomain_results = defaultdict(list)
 
         for record_type in self.record_type_list:
             full_domain = subdomain + domain
 
             content_array = hostname.content(full_domain, record_type)
+            subdomain_results[record_type].append(content_array)
 
-            if content_array is not False:
-                log_message = 'Found: ' + record_type + ' of ' + full_domain
-                print(log_message)
-                print(content_array)
+        self.complete_results[subdomain].append(subdomain_results)
 
 
     def run(self, domain):
@@ -86,21 +92,24 @@ class BulkDNSScan():
         This is done by checking if the
         '''
 
-        thread_list = {}
+        threads = []
 
         for subdomain in self.subdomain_list:
-            print("Starting thread: " + subdomain)
-            thread_list[subdomain] = Thread(target=self.scan_thread, args=(subdomain, domain))
-            thread_list[subdomain].start()
+            # print("Starting thread: " + subdomain)
+            thread = Thread(target=self.scan_thread, args=(subdomain, domain))
+            thread.start()
+            threads.append(thread)
 
+        for thread in threads:
+            thread.join()
+
+        return self.complete_results
 
 
 if __name__ == '__main__':
     scanner = BulkDNSScan()
-    scanner.run('karlglover.co.uk')
+    results = scanner.run('mage.me.uk')
     print("finished")
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(results)
 
-    """if (content_array):
-        for content in content_array:
-            print(content)
-            """
