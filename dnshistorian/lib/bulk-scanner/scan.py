@@ -66,6 +66,19 @@ class BulkDNSScan():
             'lkjkui.'
         ];
 
+    def scan_thread(self, subdomain, domain):
+        hostname = Hostname()
+
+        for record_type in self.record_type_list:
+            full_domain = subdomain + domain
+
+            content_array = hostname.content(full_domain, record_type)
+
+            if content_array is not False:
+                log_message = 'Found: ' + record_type + ' of ' + full_domain
+                print(log_message)
+                print(content_array)
+
 
     def run(self, domain):
         '''
@@ -73,28 +86,21 @@ class BulkDNSScan():
         This is done by checking if the
         '''
 
-        result = {}
-        hostname = Hostname()
+        thread_list = {}
 
         for subdomain in self.subdomain_list:
-            for record_type in self.record_type_list:
-
-                full_domain = subdomain + domain
-
-
-                content_array = hostname.content(full_domain, record_type)
-
-                if content_array is not False:
-                    log_message = 'Found: ' + record_type + ' of ' + full_domain
-                    print(log_message)
-                    print(content_array)
+            print("Starting thread: " + subdomain)
+            thread_list[subdomain] = Thread(target=self.scan_thread, args=(subdomain, domain))
+            thread_list[subdomain].start()
 
 
-            """if (content_array):
-                for content in content_array:
-                    print(content)
-                    """
 
 if __name__ == '__main__':
     scanner = BulkDNSScan()
-    scanner.run('mage.me.uk')
+    scanner.run('karlglover.co.uk')
+    print("finished")
+
+    """if (content_array):
+        for content in content_array:
+            print(content)
+            """

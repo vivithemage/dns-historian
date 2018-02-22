@@ -1,8 +1,6 @@
-import socket, json
 import dns.resolver
 import dns.query
 import dns.zone
-
 
 class Hostname():
     """
@@ -11,24 +9,19 @@ class Hostname():
 
     def get_record(self, query_hostname, record_type):
             try:
-                record = dns.resolver.query(query_hostname, record_type)
+                resolver = dns.resolver.Resolver()
+                """ Can these nameservers be randomized in order to prevent throttling? """
+                resolver.nameservers = ['109.69.8.51']
 
-            except dns.resolver.NoAnswer:
+                record = resolver.query(query_hostname, record_type)
+
+            except:
+                #print(query_hostname + record_type + " doesn't exist")
                 return False
 
             return record.response.answer[0].items
 
-    def resolves(self, query_hostname):
-        try:
-            socket.gethostbyname(query_hostname)
-            return True
-        except socket.error:
-            return False
-
     def content(self, query_hostname, record_type):
-
-        if self.resolves(query_hostname) is not True:
-            return False
 
         record_content = self.get_record(query_hostname, record_type)
 
