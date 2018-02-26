@@ -11,18 +11,18 @@ class Hostname():
             try:
                 resolver = dns.resolver.Resolver()
                 """ Can these nameservers be randomized in order to prevent throttling? """
-                resolver.nameservers = ['109.69.8.51']
+                resolver.nameservers = ['91.239.100.100']
 
                 record = resolver.query(query_hostname, record_type)
 
             except:
-                #print(query_hostname + record_type + " doesn't exist")
+                #print("Unexpected error:", sys.exc_info()[0])
                 return False
+
 
             return record.response.answer[0].items
 
     def content(self, query_hostname, record_type):
-
         record_content = self.get_record(query_hostname, record_type)
 
         return record_content
