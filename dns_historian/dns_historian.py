@@ -1,14 +1,28 @@
-import sys
-import json
 import argparse
+import dns.resolver
+import dns.query
+import dns.zone
 
-from parser import *
 from storage import *
 from utils import *
 
 from flask import Flask, url_for, json, request
 
 app = Flask(__name__)
+
+def get_records(query_hostname, record_type):
+    record_array = []
+
+    try:
+        for record in dns.resolver.query(query_hostname, record_type) :
+            record_array.append(str(record))
+
+        return sorted(record_array)
+
+    except dns.resolver.NoAnswer:
+        return ['no records']
+
+
 
 @app.route("/write.json", methods = ['POST'])
 def write():
